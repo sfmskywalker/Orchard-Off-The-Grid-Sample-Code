@@ -3,10 +3,6 @@
     var layoutEditor = (LayoutEditor)ViewBag.LayoutEditor;
     Style.Include("~/Modules/Orchard.Layouts/Styles/default-grid.css");
 }
-<h2>@T("Layout Display")</h2>
-@Display(ViewBag.LayoutShape)
-
-<h2>@T("Layout Data")</h2>
 @using (Html.BeginFormAntiForgeryPost()) {
     @Html.EditorFor(m => layoutEditor)
     <button type="submit">@T("Update")</button>
