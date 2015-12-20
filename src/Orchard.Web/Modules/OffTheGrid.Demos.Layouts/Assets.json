@@ -1,6 +1,9 @@
 [
     {
-        "inputs": [ "Assets/Styles.less" ],
-        "output": "Styles/Styles.css"
+        "inputs": [
+            "Assets/Elements/Directives/Tile.js",
+            "Assets/Elements/Models/Tile.js"
+        ],
+        "output": "Scripts/TileElement.js"
     }
 ]
