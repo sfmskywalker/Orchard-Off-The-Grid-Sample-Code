@@ -1,0 +1,16 @@
+﻿@using Orchard.ContentManagement;
+@using Orchard.DisplayManagement.Shapes
+@using Orchard.Layouts.Helpers
+@using Orchard.MediaLibrary.Models
+@{
+    var tagBuilder = (OrchardTagBuilder)TagBuilderExtensions.CreateElementTagBuilder(Model);
+    var backgroundImage = (ImagePart)Model.BackgroundImage;
+
+    if(backgroundImage != null) {
+        var mediaPart = backgroundImage.As<MediaPart>();
+        tagBuilder.Attributes["style"] = String.Format("background-image: url('{0}');", mediaPart.MediaUrl);
+    }
+}
+@tagBuilder.StartElement
+@DisplayChildren(Model)
+@tagBuilder.EndElement

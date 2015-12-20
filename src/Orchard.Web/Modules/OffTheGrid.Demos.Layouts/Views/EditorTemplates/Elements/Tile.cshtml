@@ -1,0 +1,10 @@
+﻿@model OffTheGrid.Demos.Layouts.ViewModels.TileViewModel
+@Display.MediaLibraryPicker(
+    FieldName: Html.FieldNameFor(m => m.BackgroundImageId),
+    DisplayName: T("Background Images").ToString(),
+    Multiple: true,
+    Required: false,
+    Hint: T("Optionally select one or more background images. Additional background images may be used for specific breakpoints, depending on the current theme's implementation.").ToString(),
+    ContentItems: Model.BackgroundImages,
+    PromptOnNavigate: false,
+    ShowSaveWarning: false)
