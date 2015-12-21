@@ -7,7 +7,7 @@
         <li class="layout-panel-item layout-panel-action" title="@T("Move tile up (Ctrl+Up)")" ng-click="element.moveUp()" ng-show="element.canMoveUp()"><i class="fa fa-chevron-up"></i></li>
         <li class="layout-panel-item layout-panel-action" title="@T("Move tile down (Ctrl+Down)")" ng-click="element.moveDown()" ng-show="element.canMoveDown()"><i class="fa fa-chevron-down"></i></li>
     </ul>
-    <div class="layout-container-children-placeholder">
+    <div class="layout-container-children-placeholder" style="{{element.getTemplateStyles()}}">
         @T("Drag an element from the toolbox and drop it here to add content.")
     </div>
     @Display(New.LayoutEditor_Template_Children())
