@@ -2,13 +2,20 @@
 @using Orchard.DisplayManagement.Shapes
 @using Orchard.Layouts.Helpers
 @using Orchard.MediaLibrary.Models
+@using OffTheGrid.Demos.Layouts.Elements
 @{
     var tagBuilder = (OrchardTagBuilder)TagBuilderExtensions.CreateElementTagBuilder(Model);
+    var element = (Tile)Model.Element;
     var backgroundImage = (ImagePart)Model.BackgroundImage;
 
     if(backgroundImage != null) {
         var mediaPart = backgroundImage.As<MediaPart>();
-        tagBuilder.Attributes["style"] = String.Format("background-image: url('{0}');", mediaPart.MediaUrl);
+        var backgroundSize = !String.IsNullOrWhiteSpace(element.BackgroundSize) ? element.BackgroundSize : "cover";
+        tagBuilder.Attributes["style"] = String.Format(
+            "background-image: url('{0}'); background-size: {1}; min-height: {2}px", 
+            mediaPart.MediaUrl,
+            backgroundSize,
+            backgroundImage.Height);
     }
 }
 @tagBuilder.StartElement

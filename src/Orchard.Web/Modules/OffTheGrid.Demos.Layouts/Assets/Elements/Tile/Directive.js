@@ -13,7 +13,12 @@
                     }
                 ],
                 templateUrl: environment.templateUrl("Tile"),
-                replace: true
+                replace: true,
+                link: function ($scope, $element, $attrs) {
+                    $element.on("change", "[ng-model='element.backgroundSize']", function () {
+                        $scope.element.applyBackground();
+                    });
+                }
             };
         }
     ]);

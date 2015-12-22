@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using Orchard.ContentManagement;
-using Orchard.MediaLibrary.Models;
+﻿using Orchard.MediaLibrary.Models;
 
 namespace OffTheGrid.Demos.Layouts.ViewModels {
     public class TileViewModel {

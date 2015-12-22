@@ -1,14 +1,14 @@
 [
     {
         "inputs": [
-            "Assets/Elements/Styles/Tile.less"
+            "Assets/Elements/Tile/Style.less"
         ],
         "output": "Styles/TileElement.css"
     },
     {
         "inputs": [
-            "Assets/Elements/Directives/Tile.js",
-            "Assets/Elements/Models/Tile.js"
+            "Assets/Elements/Tile/Directive.js",
+            "Assets/Elements/Tile/Model.js"
         ],
         "output": "Scripts/TileElement.js"
     }
