@@ -10,5 +10,10 @@ namespace OffTheGrid.Demos.Layouts.Elements {
             get { return this.Retrieve(x => x.BackgroundImageId); }
             set { this.Store(x => x.BackgroundImageId, value); }
         }
+
+        public string BackgroundSize {
+            get { return this.Retrieve(x => x.BackgroundSize); }
+            set { this.Store(x => x.BackgroundSize, value); }
+        }
     }
 }

@@ -21,6 +21,13 @@ namespace OffTheGrid.Demos.Layouts.Handlers {
             var backgroundImageUrl = backgroundImage?.As<MediaPart>().MediaUrl;
 
             node["backgroundUrl"] = backgroundImageUrl;
+            node["backgroundSize"] = element.BackgroundSize;
+        }
+
+        protected override void ToElement(Tile element, JToken node) {
+            base.ToElement(element, node);
+
+            element.BackgroundSize = (string)node["backgroundSize"];
         }
     }
 }

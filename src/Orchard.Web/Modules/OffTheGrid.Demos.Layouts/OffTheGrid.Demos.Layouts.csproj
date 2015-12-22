@@ -80,8 +80,8 @@
     <Content Include="Assets\Elements\Directives\Tile.js" />
     <Content Include="Scripts\TileElement.js" />
     <Content Include="Scripts\TileElement.min.js" />
-    <Content Include="Styles\Styles.css" />
-    <Content Include="Styles\Styles.min.css" />
+    <Content Include="Styles\TileElement.css" />
+    <Content Include="Styles\TileElement.min.css" />
     <Content Include="Web.config" />
     <Content Include="Scripts\Web.config" />
     <Content Include="Styles\Web.config" />
@@ -112,7 +112,7 @@
     <Compile Include="Controllers\ElementsApiController.cs" />
     <Compile Include="Drivers\TileDriver.cs" />
     <Compile Include="Handlers\TileModelMap.cs" />
-    <Compile Include="Handlers\TileResources.cs" />
+    <Compile Include="Handlers\TileResourceRegistrations.cs" />
     <Compile Include="ResourceManifests\TileResourceManifest.cs" />
     <Compile Include="ViewModels\TileViewModel.cs" />
     <Compile Include="Elements\Tile.cs" />
@@ -135,6 +135,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\LayoutEditor.Template.Tile.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Assets\Elements\Styles\Tile.less" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -15,18 +15,21 @@ namespace OffTheGrid.Demos.Layouts.Elements {
         }
 
         protected override EditorResult OnBuildEditor(Tile element, ElementEditorContext context) {
-            var viewModel = new TileViewModel();
+            var viewModel = new TileViewModel {
+                BackgroundImageId = element.BackgroundImageId?.ToString(),
+                BackgroundSize = element.BackgroundSize
+            };
 
             // If an Updater is specified, it means the element editor form is being submitted
             // and we need to read and store the submitted data.
             if(context.Updater != null) {
                 if (context.Updater.TryUpdateModel(viewModel, context.Prefix, null, null)) {
                     element.BackgroundImageId = Orchard.Layouts.Elements.ContentItem.Deserialize(viewModel.BackgroundImageId).FirstOrDefault();
+                    element.BackgroundSize = viewModel.BackgroundSize?.Trim();
                 }
             }
-
-            var backgroundImage = GetBackgroundImage(element, VersionOptions.Latest);
-            viewModel.BackgroundImages = backgroundImage != null ? new[] { backgroundImage.ContentItem } : new ContentItem[0];
+            
+            viewModel.BackgroundImage = GetBackgroundImage(element, VersionOptions.Latest);
 
             var editorTemplate = context.ShapeFactory.EditorTemplate(
                 TemplateName: "Elements/Tile",

@@ -1,10 +1,19 @@
-﻿@model OffTheGrid.Demos.Layouts.ViewModels.TileViewModel
+﻿@using Orchard.ContentManagement
+@model OffTheGrid.Demos.Layouts.ViewModels.TileViewModel
 @Display.MediaLibraryPicker(
     FieldName: Html.FieldNameFor(m => m.BackgroundImageId),
     DisplayName: T("Background Images").ToString(),
     Multiple: true,
     Required: false,
     Hint: T("Optionally select one or more background images. Additional background images may be used for specific breakpoints, depending on the current theme's implementation.").ToString(),
-    ContentItems: Model.BackgroundImages,
+    ContentItems: Model.BackgroundImage != null ? new ContentItem[] { Model.BackgroundImage.ContentItem } : null,
     PromptOnNavigate: false,
     ShowSaveWarning: false)
+
+<fieldset>
+    <div class="form-group">
+        @Html.LabelFor(m => m.BackgroundSize, T("Background Size"))
+        @Html.TextBoxFor(m => m.BackgroundSize, new { @class = "text medium" })
+        @Html.Hint(T("Optionally specify a background-size value. Examples: auto, [length], cover, contain, initial and inherit. Substitute [length] with a widht and optionally a height, either in pixels or percentage."))
+    </div>
+</fieldset>
