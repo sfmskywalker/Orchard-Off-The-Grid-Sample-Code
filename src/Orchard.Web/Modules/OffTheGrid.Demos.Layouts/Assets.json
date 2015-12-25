@@ -11,5 +11,12 @@
             "Assets/Elements/Tile/Model.js"
         ],
         "output": "Scripts/TileElement.js"
+    },
+
+    {
+        "inputs": [
+            "Assets/Elements/Common/Style.less"
+        ],
+        "output": "Styles/CommonElement.css"
     }
 ]

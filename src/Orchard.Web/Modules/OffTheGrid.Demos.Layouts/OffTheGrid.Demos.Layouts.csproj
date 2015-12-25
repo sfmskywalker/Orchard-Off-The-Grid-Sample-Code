@@ -80,6 +80,8 @@
     <Content Include="Assets\Elements\Tile\Directive.js" />
     <Content Include="Scripts\TileElement.js" />
     <Content Include="Scripts\TileElement.min.js" />
+    <Content Include="Styles\CommonElement.css" />
+    <Content Include="Styles\CommonElement.min.css" />
     <Content Include="Styles\TileElement.css" />
     <Content Include="Styles\TileElement.min.css" />
     <Content Include="Web.config" />
@@ -110,6 +112,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\ElementsApiController.cs" />
+    <Compile Include="Drivers\CommonElementDriver.cs" />
+    <Compile Include="Handlers\CommonElementHandler.cs" />
+    <Compile Include="Helpers\ElementExtensions.cs" />
+    <Compile Include="ResourceManifests\CommonElementResourceManifest.cs" />
+    <Compile Include="ViewModels\ElementViewModel.cs" />
     <Compile Include="Drivers\TileDriver.cs" />
     <Compile Include="Handlers\TileModelMap.cs" />
     <Compile Include="Handlers\TileResourceRegistrations.cs" />
@@ -134,6 +141,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\Elements\Tile\Style.less" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Assets\Elements\Common\Style.less" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\EditorTemplates\Elements\Common.Visibility.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
