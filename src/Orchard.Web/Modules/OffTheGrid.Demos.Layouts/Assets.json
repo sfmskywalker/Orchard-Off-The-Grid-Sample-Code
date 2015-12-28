@@ -1,8 +1,6 @@
 [
     {
-        "inputs": [
-            "Assets/Elements/Tile/Style.less"
-        ],
+        "inputs": [ "Assets/Elements/Tile/Style.less" ],
         "output": "Styles/TileElement.css"
     },
     {
@@ -14,9 +12,25 @@
     },
 
     {
-        "inputs": [
-            "Assets/Elements/Common/Style.less"
-        ],
+        "inputs": [ "Assets/Elements/Common/Style.less" ],
         "output": "Styles/CommonElement.css"
+    },
+
+    {
+        "inputs": [ "Assets/Elements/SlideShow/Admin.less" ],
+        "output": "Styles/SlideShow.Admin.css"
+    },
+    {
+        "inputs": [ "Assets/Elements/SlideShow/Admin.js" ],
+        "output": "Scripts/SlideShow.Admin.js"
+    },
+
+    {
+        "inputs": [ "Assets/Elements/SlideShow/Bootstrap.Carousel.css" ],
+        "output": "Styles/SlideShow.css"
+    },
+    {
+        "inputs": [ "Assets/Elements/SlideShow/Bootstrap.Carousel.js" ],
+        "output": "Scripts/SlideShow.js"
     }
 ]

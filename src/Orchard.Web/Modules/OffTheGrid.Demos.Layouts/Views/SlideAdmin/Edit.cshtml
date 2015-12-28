@@ -1,0 +1,11 @@
+﻿@model OffTheGrid.Demos.Layouts.ViewModels.SlideEditorViewModel
+@{
+    Layout.Title = T("Edit Slide");
+}
+@using (Html.BeginFormAntiForgeryPost()) {
+    @Html.EditorForModel()
+    <fieldset>
+        <button type="submit" name="submit.Save" value="submit.Save">@T("Save")</button>
+        @Html.ActionLink(T("Cancel").ToString(), "Edit", "Element", new { session = Model.Session, area = "Orchard.Layouts" }, new { @class = "button" })
+    </fieldset>
+}

@@ -59,6 +59,10 @@
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Http, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\lib\aspnetwebapi\System.Web.Http.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.Mvc, Version=5.2.3, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\lib\aspnetmvc\System.Web.Mvc.dll</HintPath>
@@ -76,12 +80,24 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets.json" />
+    <Content Include="Assets\Elements\SlideShow\Admin.js" />
+    <Content Include="Assets\Elements\SlideShow\Bootstrap.Carousel.css" />
+    <Content Include="Assets\Elements\SlideShow\Bootstrap.Carousel.js" />
     <Content Include="Assets\Elements\Tile\Model.js" />
     <Content Include="Assets\Elements\Tile\Directive.js" />
+    <Content Include="Fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Scripts\SlideShow.Admin.js" />
+    <Content Include="Scripts\SlideShow.Admin.min.js" />
+    <Content Include="Scripts\SlideShow.js" />
+    <Content Include="Scripts\SlideShow.min.js" />
     <Content Include="Scripts\TileElement.js" />
     <Content Include="Scripts\TileElement.min.js" />
     <Content Include="Styles\CommonElement.css" />
     <Content Include="Styles\CommonElement.min.css" />
+    <Content Include="Styles\SlideShow.Admin.css" />
+    <Content Include="Styles\SlideShow.Admin.min.css" />
+    <Content Include="Styles\SlideShow.css" />
+    <Content Include="Styles\SlideShow.min.css" />
     <Content Include="Styles\TileElement.css" />
     <Content Include="Styles\TileElement.min.css" />
     <Content Include="Web.config" />
@@ -111,11 +127,21 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\SlideAdminController.cs" />
     <Compile Include="Controllers\ElementsApiController.cs" />
+    <Compile Include="Controllers\UrlStringExtensions.cs" />
     <Compile Include="Drivers\CommonElementDriver.cs" />
+    <Compile Include="Drivers\SlideShowDriver.cs" />
+    <Compile Include="Elements\SlideShow.cs" />
+    <Compile Include="Filters\DialogAttribute.cs" />
     <Compile Include="Handlers\CommonElementHandler.cs" />
     <Compile Include="Helpers\ElementExtensions.cs" />
+    <Compile Include="Models\Slide.cs" />
     <Compile Include="ResourceManifests\CommonElementResourceManifest.cs" />
+    <Compile Include="Services\ISlidesSerializer.cs" />
+    <Compile Include="Services\SlidesSerializer.cs" />
+    <Compile Include="ViewModels\SlideEditorViewModel.cs" />
+    <Compile Include="ViewModels\SlideShowViewModel.cs" />
     <Compile Include="ViewModels\ElementViewModel.cs" />
     <Compile Include="Drivers\TileDriver.cs" />
     <Compile Include="Handlers\TileModelMap.cs" />
@@ -125,7 +151,7 @@
     <Compile Include="Elements\Tile.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Models\" />
+    <Content Include="Views\SlideAdmin\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\ElementsApi\Index.cshtml" />
@@ -147,6 +173,34 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\EditorTemplates\Elements\Common.Visibility.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\EditorTemplates\Elements\SlideShow.Slides.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Assets\Elements\SlideShow\Admin.less" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\EditorTemplates\SlideEditorViewModel.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\SlideAdmin\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Elements\SlideShow.Design.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Elements\SlideShow.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="Fonts\Web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\EditorTemplates\Elements\SlideShow.Properties.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

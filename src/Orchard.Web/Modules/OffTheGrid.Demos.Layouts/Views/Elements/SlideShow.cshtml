@@ -1,0 +1,48 @@
+﻿@using OffTheGrid.Demos.Layouts.Elements
+@{
+    Style.Include("SlideShow.css", "SlideShow.min.css");
+    Script.Require("jQuery");
+    Script.Include("SlideShow.js", "SlideShow.min.js");
+
+    var element = (SlideShow)Model.Element;
+    var slides = (IList<dynamic>)Model.Slides;
+    var slideShowId = String.Format("Slideshow-{0}", DateTime.Now.Ticks);
+}
+@if (slides.Any()) {
+    <div id="@slideShowId" class="carousel slide"
+         data-ride="carousel"
+         data-interval="@element.Interval"
+         data-wrap="@element.Wrap.ToString().ToLower()"
+         data-keyboard="@element.Keyboard.ToString().ToLower()"
+         data-pause="@element.Pause">
+        @if (element.Indicators) {
+                <!-- Indicators -->
+            <ol class="carousel-indicators">
+                @for (var i = 0; i < slides.Count; i++) {
+                    <li data-target="#@slideShowId" data-slide-to="@i" @if (i == 0) { <text> class="active" </text>  }></li>
+                }
+            </ol>
+        }
+
+        <!-- Wrapper for slides -->
+        <div class="carousel-inner" role="listbox">
+            @for (var i = 0; i < slides.Count; i++) {
+                <div class="item @if(i == 0){<text>active</text>}">
+                    @Display(slides[i])
+                </div>
+            }
+        </div>
+
+        @if (element.Controls) {
+                <!-- Controls -->
+            <a class="left carousel-control" href="#@slideShowId" role="button" data-slide="prev">
+                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                <span class="sr-only">@T("Previous")</span>
+            </a>
+                <a class="right carousel-control" href="#@slideShowId" role="button" data-slide="next">
+                    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                    <span class="sr-only">@T("Next")</span>
+                </a>
+        }
+    </div>
+}
