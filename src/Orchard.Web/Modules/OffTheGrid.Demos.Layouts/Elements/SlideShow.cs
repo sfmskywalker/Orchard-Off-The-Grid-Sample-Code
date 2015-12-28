@@ -22,7 +22,7 @@ namespace OffTheGrid.Demos.Layouts.Elements {
         }
 
         public string Pause {
-            get { return this.Retrieve(x => x.Pause, () => "hover"); }
+            get { return this.Retrieve(x => x.Pause); }
             set { this.Store(x => x.Pause, value); }
         }
 

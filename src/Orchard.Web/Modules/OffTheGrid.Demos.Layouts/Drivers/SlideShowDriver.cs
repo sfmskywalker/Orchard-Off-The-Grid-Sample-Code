@@ -32,7 +32,7 @@ namespace OffTheGrid.Demos.Layouts.Elements {
             };
 
             if (context.Updater != null) {
-                if (context.Updater.TryUpdateModel(viewModel, context.Prefix, new[] { "Indices", "SlidesData" }, null)) {
+                if (context.Updater.TryUpdateModel(viewModel, context.Prefix, null, new[] { "Element", "Session", "Slides" })) {
                     var currentSlides = slides;
                     var newSlides = new List<Slide>(currentSlides.Count);
 

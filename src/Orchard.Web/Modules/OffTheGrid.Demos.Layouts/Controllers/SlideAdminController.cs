@@ -12,6 +12,8 @@ using Orchard.UI.Notify;
 using Orchard.Layouts.Models;
 using OffTheGrid.Demos.Layouts.Elements;
 using OffTheGrid.Demos.Layouts.Filters;
+using System;
+using System.Collections.Generic;
 using Orchard.Layouts.Elements;
 
 namespace OffTheGrid.Demos.Layouts.Controllers {
@@ -57,37 +59,7 @@ namespace OffTheGrid.Demos.Layouts.Controllers {
         [HttpPost]
         [ValidateInput(false)]
         public ActionResult Create(SlideEditorViewModel viewModel) {
-            var slideShowSessionState = _objectStore.Get<ElementSessionState>(viewModel.Session);
-            var elementData = ElementDataHelper.Deserialize(slideShowSessionState.ElementData);
-            var slideShow = _elementManager.ActivateElement<SlideShow>(x => x.Data = elementData);
-            var slides = _slidesSerializer.Deserialize(slideShow.SlidesData).ToList();
-            var slideLayout = _layoutModelMapper.ToLayoutModel(viewModel.LayoutEditor.Data, DescribeElementsContext.Empty);
-            var recycleBin = (RecycleBin)_layoutModelMapper.ToLayoutModel(viewModel.LayoutEditor.RecycleBin, DescribeElementsContext.Empty).SingleOrDefault();
-            var removedElements = recycleBin != null ? recycleBin.Elements : Enumerable.Empty<Element>();
-            var context = new LayoutSavingContext {
-                Updater = this,
-                Elements = slideLayout,
-                RemovedElements = removedElements
-            };
-
-            _elementManager.Saving(context);
-            _elementManager.Removing(context);
-
-            // Add the new slide to the in-memory slides list.
-            slides.Add(new Slide { LayoutData = _layoutSerializer.Serialize(slideLayout) });
-
-            // Serialize the in-memory list and assign it back to the SlidesData property of the SlideShow element.
-            slideShow.SlidesData = _slidesSerializer.Serialize(slides);
-
-            // Serialize the slide show element itself.
-            slideShowSessionState.ElementData = ElementDataHelper.Serialize(slideShow.Data);
-
-            // Replace the slide show in the object store with the updated data.
-            _objectStore.Set(viewModel.Session, slideShowSessionState);
-
-            // Redirect back to the element editor. The ReturnUrl contains the session key.
-            _notifier.Information(T("That slide has been added."));
-            return RedirectToAction("Edit", "Element", new { session = viewModel.Session, area = "Orchard.Layouts" });
+            return CreateOrUpdateSlide(viewModel, T("That slide has been added."));
         }
 
         public ActionResult Edit(string session, int index) {
@@ -107,25 +79,72 @@ namespace OffTheGrid.Demos.Layouts.Controllers {
         [HttpPost]
         [ValidateInput(false)]
         public ActionResult Edit(SlideEditorViewModel viewModel, int index) {
-            var slideShowSessionState = _objectStore.Get<ElementSessionState>(viewModel.Session);
+            return CreateOrUpdateSlide(viewModel, T("That slide has been updated."));
+        }
+
+        [HttpPost]
+        public ActionResult Delete(string session, int index) {
+            UpdateSlideShowSlides(session, slides => {
+                // Delete the slide at the specified index.
+                slides.RemoveAt(index);
+            });
+            
+            // Redirect back to the element editor. The ReturnUrl contains the session key.
+            _notifier.Information(T("That slide has been deleted."));
+            return RedirectToElementEditor(session);
+        }
+
+        /// <summary>
+        /// Either adds or updates a slide, depending on the viewModel.SlideIndex value.
+        /// If no index was specified, it means we're adding a slide.
+        /// Otherwise, we're updating the slide at the specified index.
+        /// </summary>
+        private ActionResult CreateOrUpdateSlide(SlideEditorViewModel viewModel, LocalizedString successNotification) {
+            UpdateSlideShowSlides(viewModel.Session, slides => {
+                var slide = viewModel.SlideIndex != null ? slides[viewModel.SlideIndex.Value] : default(Slide);
+                var slideLayout = _layoutModelMapper.ToLayoutModel(viewModel.LayoutEditor.Data, DescribeElementsContext.Empty);
+                var recycleBin = (RecycleBin)_layoutModelMapper.ToLayoutModel(viewModel.LayoutEditor.RecycleBin, DescribeElementsContext.Empty).First();
+                var context = new LayoutSavingContext {
+                    Updater = this,
+                    Elements = slideLayout,
+                    RemovedElements = recycleBin.Elements
+                };
+
+                _elementManager.Saving(context);
+                _elementManager.Removing(context);
+
+                // Check if we are updating an existing slide or creating a new one.
+                if (slide == null) {
+                    slide = new Slide();
+                    slides.Add(slide);
+                }
+
+                // Update the slide.
+                slide.TemplateId = viewModel.LayoutEditor.TemplateId;
+                slide.LayoutData = _layoutSerializer.Serialize(slideLayout);
+            });
+            
+            // Redirect back to the element editor. The ReturnUrl contains the session key.
+            _notifier.Information(successNotification);
+            return RedirectToElementEditor(viewModel.Session);
+        }
+
+        /// <summary>
+        /// Deserializes the SlideShow element from the object store,
+        /// invokes the specified callback, passing in the list of slides of the slide show,
+        /// which then is stored back into the slide show, which in turn is serialized again
+        /// and stored in the object store.
+        /// </summary>
+        /// <param name="session">The key into the object store where the slide show is stored.</param>
+        /// <param name="updater">The action to callback that adds / updates / removes from the specified list of slides.</param>
+        private void UpdateSlideShowSlides(string session, Action<IList<Slide>> updater) {
+            var slideShowSessionState = _objectStore.Get<ElementSessionState>(session);
             var elementData = ElementDataHelper.Deserialize(slideShowSessionState.ElementData);
             var slideShow = _elementManager.ActivateElement<SlideShow>(x => x.Data = elementData);
             var slides = _slidesSerializer.Deserialize(slideShow.SlidesData).ToList();
-            var slide = slides[viewModel.SlideIndex];
-            var slideLayout = _layoutModelMapper.ToLayoutModel(viewModel.LayoutEditor.Data, DescribeElementsContext.Empty);
-            var removedElements = _layoutModelMapper.ToLayoutModel(viewModel.LayoutEditor.RecycleBin, DescribeElementsContext.Empty);
-            var context = new LayoutSavingContext {
-                Updater = this,
-                Elements = slideLayout,
-                RemovedElements = removedElements
-            };
 
-            _elementManager.Saving(context);
-            _elementManager.Removing(context);
-
-            // Update the slide.
-            slide.TemplateId = viewModel.LayoutEditor.TemplateId;
-            slide.LayoutData = _layoutSerializer.Serialize(slideLayout);
+            // Manipulate the list of slides.
+            updater(slides);
 
             // Serialize the in-memory list and assign it back to the SlidesData property of the SlideShow element.
             slideShow.SlidesData = _slidesSerializer.Serialize(slides);
@@ -134,11 +153,11 @@ namespace OffTheGrid.Demos.Layouts.Controllers {
             slideShowSessionState.ElementData = ElementDataHelper.Serialize(slideShow.Data);
 
             // Replace the slide show in the object store with the updated data.
-            _objectStore.Set(viewModel.Session, slideShowSessionState);
+            _objectStore.Set(session, slideShowSessionState);
+        }
 
-            // Redirect back to the element editor. The ReturnUrl contains the session key.
-            _notifier.Information(T("That slide has been updated."));
-            return RedirectToAction("Edit", "Element", new { session = viewModel.Session, area = "Orchard.Layouts" });
+        private ActionResult RedirectToElementEditor(string session) {
+            return RedirectToAction("Edit", "Element", new { session = session, area = "Orchard.Layouts" });
         }
         
         bool IUpdateModel.TryUpdateModel<TModel>(TModel model, string prefix, string[] includeProperties, string[] excludeProperties) {
