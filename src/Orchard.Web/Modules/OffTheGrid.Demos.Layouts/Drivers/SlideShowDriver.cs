@@ -5,20 +5,21 @@ using System.Collections.Generic;
 using OffTheGrid.Demos.Layouts.Models;
 using System.Linq;
 using Orchard.Layouts.Services;
+using Orchard.ContentManagement;
 
 namespace OffTheGrid.Demos.Layouts.Elements {
-    public class SlideshowElementDriver : ElementDriver<SlideShow> {
+    public class SlideShowDriver : ElementDriver<SlideShow> {
         private ILayoutManager _layoutManager;
         private ISlidesSerializer _slidesSerializer;
 
-        public SlideshowElementDriver(ILayoutManager layoutManager, ISlidesSerializer slidesSerializer) {
+        public SlideShowDriver(ILayoutManager layoutManager, ISlidesSerializer slidesSerializer) {
             _layoutManager = layoutManager;
             _slidesSerializer = slidesSerializer;
         }
 
         protected override EditorResult OnBuildEditor(SlideShow element, ElementEditorContext context) {
             var slides = RetrieveSlides(element).ToList();
-            var slideShapes = slides.Select(x => _layoutManager.RenderLayout(x.LayoutData, content: context.Content)).ToList();
+            var slideShapes = DisplaySlides(slides, context.Content).ToList();
             var viewModel = new SlideShowViewModel {
                 Element = element,
                 Session = context.Session,
@@ -49,31 +50,26 @@ namespace OffTheGrid.Demos.Layouts.Elements {
             }
 
             var slidesEditor = context.ShapeFactory.EditorTemplate(TemplateName: "Elements/SlideShow.Slides", Prefix: context.Prefix, Model: viewModel);
-            var propertiesEditor = context.ShapeFactory.EditorTemplate(TemplateName: "Elements/SlideShow.Properties", Prefix: context.Prefix, Model: viewModel);
+            var playerEditor = context.ShapeFactory.EditorTemplate(TemplateName: "Elements/SlideShow.Player", Prefix: context.Prefix, Model: viewModel);
 
             slidesEditor.Metadata.Position = "Slides:0";
-            propertiesEditor.Metadata.Position = "Properties:1";
+            playerEditor.Metadata.Position = "Player:1";
 
-            return Editor(context, slidesEditor, propertiesEditor);
+            return Editor(context, slidesEditor, playerEditor);
         }
 
         protected override void OnDisplaying(SlideShow element, ElementDisplayingContext context) {
-            var slideShapes = DisplaySlides(element, context).ToList();
-            context.ElementShape.Slides = slideShapes;
+            var slides = RetrieveSlides(element);
+            context.ElementShape.Slides = DisplaySlides(slides, context.Content).ToList();
         }
 
-        private IEnumerable<dynamic> DisplaySlides(SlideShow element, ElementDisplayingContext context) {
-            var slidesData = element.SlidesData;
-            var slides = _slidesSerializer.Deserialize(slidesData).ToList();
-            var slideShapes = slides.Select(x => _layoutManager.RenderLayout(x.LayoutData, content: context.Content));
-            return slideShapes;
+        private IEnumerable<dynamic> DisplaySlides(IEnumerable<Slide> slides, IContent content) {
+            return slides.Select(x => _layoutManager.RenderLayout(x.LayoutData, content: content));
         }
 
         private IEnumerable<Slide> RetrieveSlides(SlideShow element) {
             var slidesData = element.SlidesData;
-            var slides = _slidesSerializer.Deserialize(slidesData).ToList();
-
-            return slides;
+            return _slidesSerializer.Deserialize(slidesData);
         }
 
         private void StoreSlides(SlideShow element, IEnumerable<Slide> slides) {
