@@ -44,6 +44,8 @@ namespace OffTheGrid.Demos.Layouts.Controllers {
             _objectStore = objectStore;
             _slidesSerializer = slidesSerializer;
             _notifier = notifier;
+
+            T = NullLocalizer.Instance;
         }
 
         public Localizer T { get; set; }
@@ -63,16 +65,29 @@ namespace OffTheGrid.Demos.Layouts.Controllers {
         }
 
         public ActionResult Edit(string session, int index) {
+            // Get the element's state from the object store.
             var slideShowSessionState = _objectStore.Get<ElementSessionState>(session);
+
+            // Deserialize the element's state into a dictionary.
             var elementData = ElementDataHelper.Deserialize(slideShowSessionState.ElementData);
+
+            // Activate a new SlideShow element and initialize it with the state dictionary.
             var slideShow = _elementManager.ActivateElement<SlideShow>(x => x.Data = elementData);
+
+            // Deserialize the slide show slides data into a list of actual Slide objects.
             var slides = _slidesSerializer.Deserialize(slideShow.SlidesData).ToList();
+
+            // Get a reference to the specified slide by index.
             var slide = slides[index];
+
+            // Create the view model and initialize the layout editor with the slide's layout data.
             var viewModel = new SlideEditorViewModel {
                 SlideIndex = index,
                 Session = session,
                 LayoutEditor = _layoutEditorFactory.Create(slide.LayoutData, _objectStore.GenerateKey(), slide.TemplateId)
             };
+
+            // Return the view.
             return View(viewModel);
         }
 
@@ -102,7 +117,7 @@ namespace OffTheGrid.Demos.Layouts.Controllers {
         private ActionResult CreateOrUpdateSlide(SlideEditorViewModel viewModel, LocalizedString successNotification) {
             UpdateSlideShowSlides(viewModel.Session, slides => {
                 var slide = viewModel.SlideIndex != null ? slides[viewModel.SlideIndex.Value] : default(Slide);
-                var slideLayout = _layoutModelMapper.ToLayoutModel(viewModel.LayoutEditor.Data, DescribeElementsContext.Empty);
+                var slideLayout = _layoutModelMapper.ToLayoutModel(viewModel.LayoutEditor.Data, DescribeElementsContext.Empty).ToList();
                 var recycleBin = (RecycleBin)_layoutModelMapper.ToLayoutModel(viewModel.LayoutEditor.RecycleBin, DescribeElementsContext.Empty).First();
                 var context = new LayoutSavingContext {
                     Updater = this,
@@ -110,6 +125,7 @@ namespace OffTheGrid.Demos.Layouts.Controllers {
                     RemovedElements = recycleBin.Elements
                 };
 
+                // Trigger the Saving and Removing events on the elements.
                 _elementManager.Saving(context);
                 _elementManager.Removing(context);
 
@@ -124,7 +140,7 @@ namespace OffTheGrid.Demos.Layouts.Controllers {
                 slide.LayoutData = _layoutSerializer.Serialize(slideLayout);
             });
             
-            // Redirect back to the element editor. The ReturnUrl contains the session key.
+            // Redirect back to the element editor.
             _notifier.Information(successNotification);
             return RedirectToElementEditor(viewModel.Session);
         }
