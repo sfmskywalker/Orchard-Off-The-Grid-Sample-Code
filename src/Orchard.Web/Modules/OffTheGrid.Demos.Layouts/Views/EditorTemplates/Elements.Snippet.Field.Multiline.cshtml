@@ -1,0 +1,11 @@
+﻿@model Orchard.Layouts.ViewModels.SnippetFieldViewModel
+@{
+    var field = Model;
+}
+<div class="form-group">
+    @Html.Label(field.Descriptor.Name, field.Descriptor.DisplayName.ToString())
+    @Html.TextArea(field.Descriptor.Name, field.Value, 10, 50, new { @class = "text large" })
+    @if (field.Descriptor.Description != null) {
+        @Html.Hint(field.Descriptor.Description)
+    }
+</div>
