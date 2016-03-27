@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using OffTheGrid.Demos.Layouts.Elements;
 using OffTheGrid.Demos.Layouts.ViewModels;
 using Orchard.ContentManagement;
 using Orchard.Layouts.Framework.Display;
@@ -6,9 +7,9 @@ using Orchard.Layouts.Framework.Drivers;
 using Orchard.Layouts.Helpers;
 using Orchard.MediaLibrary.Models;
 
-namespace OffTheGrid.Demos.Layouts.Elements {
+namespace OffTheGrid.Demos.Layouts.Drivers {
     public class TileDriver : ElementDriver<Tile> {
-        private IContentManager _contentManager;
+        private readonly IContentManager _contentManager;
 
         public TileDriver(IContentManager contentManager) {
             _contentManager = contentManager;
@@ -45,9 +46,6 @@ namespace OffTheGrid.Demos.Layouts.Elements {
         }
 
         protected override void OnExporting(Tile element, ExportElementContext context) {
-            // Get the list of selected background content item id.
-            var backgroundImageId = element.BackgroundImageId;
-
             // Load the actual background content item.
             var backgroundImage = GetBackgroundImage(element, VersionOptions.Latest);
 

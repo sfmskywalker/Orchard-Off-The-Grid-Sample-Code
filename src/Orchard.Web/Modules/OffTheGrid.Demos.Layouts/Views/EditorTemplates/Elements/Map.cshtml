@@ -1,0 +1,13 @@
+﻿@model OffTheGrid.Demos.Layouts.Elements.Map
+<fieldset>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Latitude, T("Latitude"))
+        @Html.TextBoxFor(m => m.Latitude, new {@class = "text medium"})
+        @Html.Hint(T("The latitude of the location to show on the map."))
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Longitude, T("Longitude"))
+        @Html.TextBoxFor(m => m.Longitude, new { @class = "text medium" })
+        @Html.Hint(T("The longitude of the location to show on the map."))
+    </div>
+</fieldset>

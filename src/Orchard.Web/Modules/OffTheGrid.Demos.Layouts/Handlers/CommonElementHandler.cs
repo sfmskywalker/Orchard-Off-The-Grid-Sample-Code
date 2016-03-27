@@ -8,7 +8,7 @@ using Orchard.Layouts.Framework.Drivers;
 using Orchard.Layouts.Services;
 using Orchard.UI.Resources;
 
-namespace OffTheGrid.Demos.Layouts.Elements {
+namespace OffTheGrid.Demos.Layouts.Handlers {
     public class CommonElementHandler : ElementEventHandlerBase {
         private readonly IResourceManager _resourceManager;
 
@@ -16,7 +16,7 @@ namespace OffTheGrid.Demos.Layouts.Elements {
             _resourceManager = resourceManager;
         }
 
-        private IList<Type> SupportedTypes = new List<Type> {
+        private readonly IList<Type> SupportedTypes = new List<Type> {
             { typeof(Html) },
             { typeof(Image) },
         };

@@ -1,0 +1,14 @@
+﻿@using Orchard.Layouts.Helpers
+@*Using inline CSS for demo purposes.*@
+@using (Script.Head()) {
+    <style type="text/css">
+        .jumbotron {
+            padding: 2em;
+            background: #ededed;
+        }
+    </style>
+}
+<div class="jumbotron">
+    <h2>@Html.SnippetField("Caption").DisplayedAs(T("Caption")).WithDescription(T("The caption of this jumbotron."))</h2>
+    @Html.Raw(Html.SnippetField("Text").DisplayedAs(T("Text")).WithDescription(T("The body text of this jumbotron")))
+</div>

@@ -6,7 +6,7 @@ using Orchard.MediaLibrary.Models;
 
 namespace OffTheGrid.Demos.Layouts.Handlers {
     public class TileModelMap : LayoutModelMapBase<Tile> {
-        private IContentManager _contentManager;
+        private readonly IContentManager _contentManager;
 
         public TileModelMap(IContentManager contentManager) {
             _contentManager = contentManager;
